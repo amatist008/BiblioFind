@@ -1,16 +1,18 @@
 import type { EstadoFormulario } from "@/lib/definitions";
 
 // Piezas compartidas por los formularios de la Fase 3 (login, préstamo, devolución).
-// Sin "use client": sirven tanto en Server como en Client Components.
+// Sin "use client": sirven tanto en Server como en Client Components
+
+export const claseSelect = "mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 pr-10 py-2 text-stone-800 focus:outline-none focus:ring-2 focus:ring-[#B85C2A] focus:border-transparent transition-all dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23594332%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1rem_1rem] bg-[right_0.75rem_center] bg-no-repeat";
 
 export const claseEtiqueta = "block text-sm font-medium text-zinc-700 dark:text-zinc-300";
 
 export const claseCampo =
-  "mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/30 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100";
+  "mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-stone-800 focus:outline-none focus:ring-2 focus:ring-[#B85C2A] focus:border-transparent transition-all dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100";
 
 // disabled:opacity-60 + disabled:cursor-wait: mientras la acción corre (pending), el botón se ve inactivo.
 export const claseBoton =
-  "rounded-md bg-zinc-900 px-4 py-2 font-medium text-white shadow-sm hover:bg-zinc-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-wait disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300";
+  "w-full py-3.5 px-4 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-[10px] text-[15px] transition-all hover:shadow-lg disabled:opacity-50";
 
 // Mensaje de resultado. role="alert" hace que el lector de pantalla lo anuncie apenas aparece (el error
 // llega sin recargar la página); role="status" es la versión cortés, para confirmaciones.

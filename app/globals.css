@@ -1,10 +1,26 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "react-phone-number-input/style.css";
 
 /* docs/diseno.md, DI-03 y DI-04: el tema lo decide el atributo data-tema de <html>, que pone el script del layout.
    La variante dark: se activa con el tema oscuro (antes esperaba la clase .dark que generó shadcn). */
 @custom-variant dark (&:where([data-tema="oscuro"], [data-tema="oscuro"] *));
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
 
 @theme inline {
   --color-background: var(--background);
