@@ -18,10 +18,10 @@ Inspiración, no copia: no se usan imágenes, logos ni textos de las referencias
 | ID | Decisión | Por qué |
 |---|---|---|
 | DI-01 | Componentes con **shadcn/ui sobre Radix**, preset **Maia** (`"style": "radix-maia"`), con íconos **Hugeicons** | Radix: es la base de casi toda la documentación y los ejemplos de shadcn. Maia ("soft and rounded, with generous spacing"): el preset más cercano a YowBooks, con botones en píldora. El preset no se puede cambiar después del `init` |
-| DI-02 | Navegación con **barra superior** (pestañas en píldora y menú de usuario a la derecha), sin sidebar | Estilo "Books". En el celular, las pestañas pasan a un menú (`Sheet`) |
-| DI-03 | Tres temas: **claro**, **oscuro** y **lámpara** (crema cálido). Botón de tres estados: sol, luna y lámpara | La lámpara es para leer con luz cálida |
-| DI-04 | La preferencia de tema se guarda en una **cookie** (`tema`). La lee un **script en línea del `<head>`**, que pone `<html data-tema="…">` antes del primer pintado. **Sin cookie se sigue al sistema** (`prefers-color-scheme`: claro u oscuro; la lámpara solo si se elige). Si hay sesión, la preferencia también se guarda en la cuenta (R7) | Sin dependencias ni parpadeo. Leer la cookie con `cookies()` en el layout raíz volvería dinámica toda la app (guía "Preventing flash before hydration" de Next 16); el script mantiene el layout estático, igual que el `<Suspense>` del menú. Corregido el 2026-10-27: antes decía que el layout la leía en el servidor |
-| DI-05 | Portadas **generadas** (título, autor y color derivado del ISBN) mientras no haya imagen real. Cuando exista, la imagen manda y la generada queda de respaldo | Es lo que hacen los sistemas grandes para los libros sin portada |
+| DI-02 | Navegación con **barra superior flotante**: una cápsula con borde fino, separada de los bordes de la ventana (`sticky`), con el emblema (DI-13) a la izquierda, las pestañas en píldora **centradas** (grilla `1fr auto 1fr`) y, a la derecha, el menú de usuario. Sin sidebar | Estilo "Books"; la cápsula, de la referencia "Deflexai" (Fase A, 2026-10-30). En el celular, las pestañas pasan a un menú (`Sheet`) |
+| DI-03 | Dos temas base, **claro** y **oscuro**, en un **botón flotante** abajo a la derecha (sol y luna). La **lámpara** (crema cálido) es aparte: un ícono de lámpara de pared que la enciende y la apaga: desde 1280 px (`xl`) **cuelga en la esquina superior derecha de la página**, fuera de la barra, y su foco de luz sale de ahí; en pantallas más angostas la esquina queda encima de la barra, así que va dentro de ella. El visor sigue la misma regla que el resto del sitio (decidido el 2026-11-01: antes la dejaba siempre en su barra; `LamparaDeEsquina` es la misma en las dos zonas). Encendida, **reemplaza** al tema base; apagada, vuelve a él | La lámpara es para leer con luz cálida; separarla la convierte en un gesto propio ("encender la luz"). Cambiado en la Fase A (2026-10-30): antes era un botón de tres estados |
+| DI-04 | Dos preferencias en **cookies**: `tema` (la base: `claro` u `oscuro`) y `lampara` (`encendida` o ausente). Un **script en línea del `<head>`** las lee y pone `<html data-tema="claro|oscuro|lampara" data-tema-base="claro|oscuro">` antes del primer pintado; `data-tema` vale `lampara` si está encendida. **Sin cookie de base se sigue al sistema** (`prefers-color-scheme`). Elegir sol o luna **apaga la lámpara**. Si hay sesión, la preferencia también se guarda en la cuenta (R7) | Sin dependencias ni parpadeo. Leer la cookie con `cookies()` en el layout raíz volvería dinámica toda la app (guía "Preventing flash before hydration" de Next 16). `data-tema` conserva sus tres valores para que los bloques de `globals.css` no cambien. Fase A: se agregó la segunda cookie |
+| DI-05 | Portadas **generadas** (título, autor y color derivado del ISBN) mientras no haya imagen real. Cuando exista, la imagen manda y la generada queda de respaldo. Color **igual en los tres temas**: `oklch(0.48 0.080 h)`, con `h` = FNV-1a del ISBN mod 360 (`lib/portada.ts`). Medido en los 360 tonos: cabe en sRGB y el texto blanco da 6.26:1 como mínimo (el autor, al 85 %, 5.02:1). Decidido en R4c | Es lo que hacen los sistemas grandes para los libros sin portada |
 | DI-06 | Lector digital: **EPUB con foliate-js** como formato principal y **PDF como alternativa** (el visor actual con pdf.js se conserva). Preparado para cambiar a Readium (ver más abajo) | El EPUB se reacomoda a la pantalla y toma los colores del tema: es lo que hace posible leer en modo lámpara |
 | DI-07 | Contraste mínimo **WCAG AA**: 4.5:1 para texto normal y 3:1 para texto grande e íconos, en los tres temas | Los acentos de las referencias no lo cumplen con texto blanco (ver "Acento y botón") |
 | DI-08 | Interfaz hecha de **bloques con borde fino** (estilo captura 3), no de sombras. Ver "Lenguaje de bloques" | Los bordes funcionan igual en los tres temas; las sombras casi no se ven sobre fondo oscuro ni sobre beige |
@@ -29,6 +29,9 @@ Inspiración, no copia: no se usan imágenes, logos ni textos de las referencias
 | DI-10 | Tres **zonas** (pública, "Mi cuenta" y panel) con el mapa de rutas de abajo. El panel se divide en **secciones por tipo de trabajo**, y cada persona ve **solo las secciones y páginas que su rol puede usar** | Auditoría UX del 2026-10-27 (`docs/auditoria-ux.md`): hoy todos los roles ven los mismos 8 enlaces |
 | DI-11 | **Una sola fuente de permisos**: `lib/permisos.ts` define **permisos con nombre** (`mostrador`, `coleccion`, `lectores`, `anularMultas`, `reportes`, `red`), cada uno con sus roles y la regla que lo justifica, y las secciones del panel con el permiso de cada página. Páginas y acciones piden un permiso (`exigirEmpleado("mostrador")`) y el menú muestra las páginas cuyo permiso tiene el rol. Ninguna lista ni comparación de roles se escribe fuera de ese archivo; el alcance por sede se decide con la sede (RN-34), no con el nombre del rol. Decidido el 2026-10-27: permisos con nombre en vez de un mapa de rutas, para que las acciones también lo usen | El problema de la auditoría nace de tener dos listas que se escribieron por separado: los enlaces del layout y los roles de cada página |
 | DI-12 | **Avatar** en el menú de usuario: generado con DiceBear por defecto o foto propia (RN-81, RN-82). Si no carga, se muestran las iniciales | Da identidad a la cuenta y sirve de entrada al menú de usuario, como en las referencias |
+| DI-13 | **Emblema** del proyecto a la izquierda de la barra: más alto que la cápsula, **cuelga** de ella (sobresale arriba y abajo), como un sello o un marcapáginas. El logo definitivo se está diseñando: hasta entonces hay uno provisional, y el arte vive en un solo archivo (ver "Logo e íconos de marca") | Identidad propia; el usuario lo pidió "en la barra pero no al frente y más grande" (Fase A) |
+| DI-14 | **Luz sobre una pared** en el fondo, distinta por tema: haces de **sol** en el claro, de **luna** en el oscuro y el foco cálido de una **lámpara de pared** en la lámpara. CSS (degradados) sobre una textura de pared ligera; las tarjetas siguen opacas | Da ambiente sin restar legibilidad: la luz solo se ve donde hay fondo. Referencias: aplique de pared y haces sobre concreto (Fase A) |
+| DI-15 | La luz se **anima solo al cambiar de tema** (la lámpara "calienta" al encenderse); después queda quieta. Con `prefers-reduced-motion` el cambio es inmediato | Movimiento continuo distrae al leer; la animación de entrada da la sensación de encender |
 
 ## Arquitectura de información (DI-10)
 
@@ -58,7 +61,7 @@ Una barra de pestañas propia, debajo de la barra superior.
 | `/cuenta/pago/[id]` | (sin pestaña) | Pasarela simulada | Existe; se conserva |
 | `/cuenta/perfil` | Perfil | Datos editables (RN-77), avatar (RN-81, RN-82), tema | **Nueva** (R7) |
 | `/cuenta/seguridad` | Seguridad | Contraseña (RN-78) y correo (RN-79) | **Nueva** (R7) |
-| `/leer/[isbn]` | (sin pestañas) | Visor **inmersivo**: barra mínima con volver, título y tema; sin la barra de la app | Existe; cambia el layout |
+| `/leer/[isbn]` | (sin pestañas) | Visor **inmersivo**: barra mínima con volver, título y tema; sin la barra de la app | Hecho (R5d): fuera del route group `app/(sitio)` |
 
 Un empleado sin perfil de lector no ve "Mi cuenta". El perfil, el avatar y la seguridad son de la **cuenta** (RN-31),
 así que el empleado tiene su versión dentro del panel: `/panel/perfil`, con las mismas piezas.
@@ -97,7 +100,7 @@ cada página y en cada acción (RN-35), porque un layout no se vuelve a ejecutar
 
 | Pieza | Contenido | Dónde |
 |---|---|---|
-| Barra superior (todas las páginas, salvo el visor) | Logo · pestañas en píldora: **Catálogo**, **Mi cuenta** (si es lector), **Panel** (si es empleado) · botón de tema · menú de usuario | `app/layout.tsx` |
+| Barra superior flotante (todas las páginas, salvo el visor) | Emblema (DI-13) · pestañas en píldora: **Catálogo**, **Mi cuenta** (si es lector), **Panel** (si es empleado) · lámpara (DI-03) · menú de usuario | `app/(sitio)/layout.tsx` (R5d: route group) |
 | Menú de usuario (sin sesión) | "Iniciar sesión" y "Crear cuenta" | Barra superior |
 | Menú de usuario (con sesión) | Avatar (DI-12) que abre un menú: nombre y correo, Mi cuenta / Panel, Perfil, Seguridad, Salir | Barra superior (`DropdownMenu`) |
 | Sub-navegación | Pestañas de "Mi cuenta" o secciones del panel del rol | Layout de la zona |
@@ -123,6 +126,11 @@ sabe qué tema está activo.
 
 Valores **propuestos**, a ajustar en R2 viéndolos en pantalla. Medidos con el algoritmo de contraste de WCAG 2.
 
+**R6:** `pnpm diseno:contraste` (`scripts/contraste.ts`) lee `app/globals.css` y mide en los tres temas cada combinación
+que usan las pantallas (27 pares: texto 4.5:1, contornos y foco 3:1). Termina con error si alguna falla: correrlo después
+de cambiar cualquier color. Además, R6 cambió: foco con `outline-ring` al 100 % (al 50 % daba 2.07-2.77) y el botón
+`destructive` con el par `danger-suave`/`danger-texto` (el de shadcn daba 4.49 en claro).
+
 En `globals.css` cada tema define solo sus colores base y de estado. Los derivados se escriben una vez en `:root`
 y apuntan a la base: `card-foreground`, `popover` y `popover-foreground`, `secondary` (= `muted`), `input`
 (= `border`), `ring` (= `primary`), `destructive` (= `danger`), los `chart-*` y los `sidebar-*`. Tokens propios
@@ -135,6 +143,7 @@ desplazamiento y los controles nativos sigan el tema.
 | `muted` (bandeja) | `#EEEBE8` | `#EEE0C8` | `#2A2522` | `muted-foreground` encima: 4.96 · 4.55 · 5.89 |
 | `accent-foreground` | `#8A420A` | `#3B2A1A` | `#F5C08F` | Sobre `accent`: 6.51 · 9.64 · 8.38 |
 | `decorativo` | `#E68124` | `#D9AB61` | `#F0923A` | Sin texto encima |
+| `borde-campo` (R6) | `#898480` | `#8E7C5F` | `#7F7873` (Fase A; antes `#77706A`) | Contorno de `<input>`/`<select>`: ≥ 3.1 contra fondo, tarjeta y bandeja (WCAG 1.4.11). `--input` (= `border`) daba 1.19-1.41 |
 
 ### Claro
 
@@ -152,11 +161,11 @@ desplazamiento y los controles nativos sigan el tema.
 
 | Token | Hex | oklch | Uso |
 |---|---|---|---|
-| `background` | `#F2E5D0` | `oklch(0.927 0.031 79.9)` | Fondo beige |
+| `background` | `#FBE8D7` | `oklch(0.942 0.031 64.3)` | Fondo durazno claro. Elegido por el usuario en R6 (antes `#F2E5D0`): todos los textos mejoran su contraste |
 | `card` | `#F9F3EE` | `oklch(0.967 0.009 62.6)` | Tarjetas crema |
 | `foreground` | `#3B2A1A` | `oklch(0.301 0.037 64.0)` | Texto café (11.03:1) |
-| `muted-foreground` | `#76604A` | `oklch(0.505 0.044 66.6)` | Texto secundario (4.77:1) |
-| `primary` | `#8A5A12` | `oklch(0.509 0.103 70.8)` | Botones (texto crema 5.60:1) |
+| `muted-foreground` | `#6A553F` | `oklch(0.465 0.044 66.6)` | Texto secundario. Fase A: antes `#76604A`; oscurecido para cumplir 4.5:1 en la penumbra de la lámpara (4.70) |
+| `primary` | `#7E4F00` | `oklch(0.469 0.103 70.8)` | Botones (texto crema 6.36:1). Fase A: antes `#8A5A12`; enlaces en la penumbra 4.68:1 |
 | `accent` | `#EAD6B3` | `oklch(0.884 0.051 81.6)` | Pestaña activa |
 | `border` | `#E0CDAE` | `oklch(0.856 0.047 80.0)` | Bordes |
 
@@ -167,12 +176,12 @@ Oscuro cálido (gris con un toque café), no negro azulado: conserva la familia 
 | Token | Hex | oklch | Uso |
 |---|---|---|---|
 | `background` | `#171412` | `oklch(0.194 0.006 56.0)` | Fondo |
-| `card` | `#211D1A` | `oklch(0.234 0.008 59.2)` | Tarjetas |
+| `card` | `#272320` | `oklch(0.26 0.008 59.2)` | Tarjetas. Fase A: antes `#211D1A`; se separaba poco de la pared |
 | `foreground` | `#F1ECE7` | `oklch(0.946 0.009 67.7)` | Texto (15.62:1) |
 | `muted-foreground` | `#A8A09A` | `oklch(0.711 0.013 59.5)` | Texto secundario (7.13:1) |
 | `primary` | `#F0923A` | `oklch(0.744 0.150 59.6)` | Botones (texto oscuro 7.74:1) |
-| `accent` | `#3A2A1E` | `oklch(0.300 0.031 58.1)` | Pestaña activa |
-| `border` | `#36302B` | `oklch(0.314 0.012 62.2)` | Bordes |
+| `accent` | `#423226` | `oklch(0.33 0.031 58.1)` | Pestaña activa (Fase A: antes `#3A2A1E`) |
+| `border` | `#4D4641` | `oklch(0.40 0.012 62.2)` | Bordes. Fase A: antes `#36302B`; dentro de un haz de luna desaparecía |
 
 ### Acento y botón
 
@@ -226,14 +235,48 @@ shadcn lo usen sin cambios.
 
 | Elemento | Cómo se ve | Cómo se construye |
 |---|---|---|
-| Tarjeta | Fondo `card`, borde de 1px `border`, radio `--radius`, sin sombra | `Card` de shadcn con la sombra quitada |
+| Tarjeta | Fondo `card`, borde de 1px `border`, radio del preset Maia (`rounded-2xl`, 1.8 × `--radius`), sin sombra | `Card` de shadcn con `border border-border` en lugar de su `ring-1` (R4a) |
 | Tarjeta seleccionada | Borde de color y fondo teñido (como "Want to Reread") | Borde `primary` (o el color de estado) + fondo `accent`. El borde pide 3:1 porque comunica estado |
 | Bandeja | Bloque `muted` que agrupa tarjetas (la fila de portadas) | Un `div` con `bg-muted` y `rounded` |
 | Encabezado de tarjeta | Una línea fina separa el encabezado del contenido (las citas, "Your Impression") | `border-b` con `border` |
 | Barra con rayas | Barra de progreso con líneas verticales finas encima del color | `Progress` de shadcn + `repeating-linear-gradient` con líneas más claras del mismo color. Las rayas son decorativas: el porcentaje va siempre escrito |
 | Agregar algo nuevo | Borde **punteado** de color con ícono "+" (como "New Folder") | `border-dashed` con `primary` |
-| Etiqueta | Píldora con ícono, fondo suave y texto del estado (como "Skill Booster") | `Badge` de shadcn con variantes por estado |
+| Etiqueta | Píldora con ícono, fondo suave y texto del estado (como "Skill Booster") | `Badge` de shadcn con las variantes `success`, `warning`, `danger` e `info` (R4a) |
 | Línea de tiempo | Línea vertical punteada que une pasos (como "Reading Journey") | `border-l border-dashed`. Uso posible: historial de un préstamo (prestado → renovado → devuelto) |
+
+## Logo e íconos de marca (DI-13, Fase A)
+
+El logo y los íconos de sol, luna y lámpara se pueden **conseguir o crear después** para darle identidad al proyecto. Todo el arte vive
+en `components/marca/iconos.tsx`: botones, barra y estilos solo piden "el ícono del sol" o "el logo". Al llegar los diseños se reemplaza
+ese archivo (y `app/icon.svg`), se corre `pnpm diseno:contraste` y se repiten las capturas.
+
+| Pieza | Especificación |
+|---|---|
+| Logo (emblema) | SVG con `viewBox` de proporción **4:5** (vertical, como un sello o marcapáginas). Debe funcionar en los tres temas: un solo color con `currentColor`, o dos colores con variables CSS (`var(--primary)`, `var(--card)`). Con área de seguridad (sin detalles a menos de 1/10 del borde) y legible desde 40 px de alto |
+| Logo reducido | Versión cuadrada y simple para el celular y el favicon (`app/icon.svg`), legible a 16 px |
+| Sol, luna, lámpara | SVG en una grilla de **24 × 24** con trazo de 1.5 a 2 px (para combinar con los Hugeicons del resto de la interfaz), un solo color con `currentColor`, legibles a 16 px y sin texto |
+| Lámpara | Dos estados: **apagada** y **encendida**. El encendido puede llevar un detalle de luz con el token `decorativo` |
+| Lámpara (opcional) | Una versión "ilustración" más grande para dibujar el aplique en la pared, junto a su luz (DI-14) |
+
+## Equivalencias para pasar una pantalla a tokens (R5)
+
+Una pantalla terminada no tiene `zinc-*`, `red-*`, `emerald-*`, `amber-*`, `blue-*` ni `dark:`: los tokens ya cambian
+con el tema. Revisarla con `grep -nE "zinc-|red-|emerald-|amber-|blue-|dark:" archivo.tsx` (debe salir vacío).
+
+| Antes | Después | Nota |
+|---|---|---|
+| `text-zinc-900 dark:text-zinc-50` (texto principal) | nada (hereda `text-foreground` del `body`) | Solo se escribe `text-foreground` para volver al principal dentro de algo gris |
+| `text-zinc-500`, `text-zinc-600 dark:text-zinc-400`, `text-zinc-700 dark:text-zinc-300` (texto secundario) | `text-muted-foreground` | Contraste AA medido en los tres temas |
+| `text-zinc-400` (deshabilitado, decorativo) | `text-muted-foreground` + `opacity-50` | Solo para lo que no se puede usar |
+| `border-zinc-200 dark:border-zinc-800`, `border-zinc-300 dark:border-zinc-700` | `border-border` | También `divide-border` |
+| `bg-white dark:bg-zinc-900` + `border` + `shadow-sm` (tarjeta) | `rounded-2xl border border-border bg-card` | Sin sombra (DI-08). Si encaja en columna, `<Card>` |
+| `bg-zinc-100 dark:bg-zinc-800` (fondo gris, bandeja) | `bg-muted` | `hover:bg-muted` para el *hover* |
+| Botón `bg-zinc-900 text-white …` | `<Button>`, o `buttonVariants()` en un `<Link>`; en formularios, `claseBoton` | `variant`: `default`, `outline`, `destructive`, `ghost` |
+| Píldora de estado con `red-*`, `emerald-*`, `amber-*` | `<Badge variant="danger" \| "success" \| "warning" \| "info" \| "secondary">` | Significado de cada color en "Colores de estado" |
+| Mensaje con `bg-red-50 text-red-800 …` | `<MensajeFormulario>` o `border-danger/40 bg-danger-suave text-danger-texto` | Igual con `success`, `warning`, `info` |
+| Campo con `focus:ring-blue-600` | `claseCampo` y `claseEtiqueta` (`components/ui-formulario.tsx`) | |
+| "Sin préstamos." en texto suelto | `<EstadoVacio accion={…}>` | La acción siguiente, si la hay |
+| Tarjeta con barra de color del libro | `<Portada>` | El color de la sección queda en `InsigniaSeccion` |
 
 ## Tipografía
 
@@ -264,6 +307,8 @@ shadcn lo usen sin cambios.
 
 ## Pasos de la Fase R
 
+La Fase R terminó en R6 (2026-10-30): solo lo visual. R7 y R8 son funciones nuevas y siguen en una fase aparte.
+
 | Paso | Contenido |
 |---|---|
 | R0 | Esta ficha |
@@ -273,5 +318,5 @@ shadcn lo usen sin cambios.
 | R4 | Componentes base, `Portada` generada y estados comunes (vacío, error) |
 | R5 | Pantallas (catálogo, detalle, cuenta repartida en pestañas, panel, login y registro), aviso "por vencer" (RN-76) y filtro del visor PDF |
 | R6 | Verificación: contraste en los tres temas, teclado, celular y recorrido de cada rol (auditoría UX) |
-| R7 | Mi cuenta: perfil y datos (RN-77), contraseña (RN-78), correo (RN-79), recuperar contraseña (RN-80), avatar DiceBear y foto (RN-81, RN-82), tema en la cuenta. Cambia el esquema (ver `modelo-datos.md`) |
-| R8 | Lector EPUB con foliate-js: reglas (RN-54 y seguridad), EPUB de muestra en `archivos:muestra`, `<Visor>` |
+| R7 | **Fase aparte "Mi cuenta y lector EPUB" (2026-10-30).** Mi cuenta: perfil y datos (RN-77), contraseña (RN-78), correo (RN-79), recuperar contraseña (RN-80), avatar DiceBear y foto (RN-81, RN-82), tema en la cuenta. Cambia el esquema (ver `modelo-datos.md`) |
+| R8 | **Fase aparte "Mi cuenta y lector EPUB" (2026-10-30).** Lector EPUB con foliate-js: reglas (RN-54 y seguridad), EPUB de muestra en `archivos:muestra`, `<Visor>` |

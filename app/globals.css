@@ -59,6 +59,7 @@
   --color-card: var(--card);
   /* Propios del proyecto (docs/diseno.md): acento decorativo y colores de estado DI-09. */
   --color-decorativo: var(--decorativo);
+  --color-borde-campo: var(--borde-campo);
   --color-success: var(--success);
   --color-success-suave: var(--success-suave);
   --color-success-texto: var(--success-texto);
@@ -98,6 +99,9 @@
   --accent-foreground: oklch(0.464 0.116 51); /* #8A420A */
   --border: oklch(0.915 0.009 67.7); /* #E7E2DD */
   --decorativo: oklch(0.701 0.158 56.9); /* #E68124 */
+  /* R6: borde de <input>/<select>. WCAG 1.4.11 pide 3:1 para el contorno que identifica un campo; --input (= --border)
+     daba 1.19-1.41. Mismo tono que --border, con la L mínima que da >= 3.1 contra fondo, tarjeta y bandeja. */
+  --borde-campo: oklch(0.617 0.009 67.7); /* #898480 */
 
   --success: oklch(0.564 0.143 146.4); /* #2E8B3E */
   --success-suave: oklch(0.953 0.022 149.7); /* #E6F4E8 */
@@ -139,17 +143,19 @@
 /* Lámpara: crema cálido para leer con luz de lámpara. */
 [data-tema="lampara"] {
   color-scheme: light;
-  --background: oklch(0.927 0.031 79.9); /* #F2E5D0 */
+  /* Elegido por el usuario (2026-10-30), más claro y durazno. Antes: oklch(0.927 0.031 79.9), #F2E5D0. */
+  --background: oklch(0.942 0.031 64.3); /* #FBE8D7 */
   --card: oklch(0.967 0.009 62.6); /* #F9F3EE */
   --foreground: oklch(0.301 0.037 64); /* #3B2A1A */
   --muted: oklch(0.912 0.035 81.3); /* #EEE0C8 */
-  --muted-foreground: oklch(0.505 0.044 66.6); /* #76604A */
-  --primary: oklch(0.509 0.103 70.8); /* #8A5A12 */
+  --muted-foreground: oklch(0.465 0.044 66.6); /* Fase A: antes 0.505 (#76604A); aguanta la penumbra de la lámpara */
+  --primary: oklch(0.469 0.103 70.8); /* Fase A: antes 0.509 (#8A5A12); aguanta la penumbra de la lámpara */
   --primary-foreground: oklch(0.967 0.009 62.6); /* #F9F3EE */
   --accent: oklch(0.884 0.051 81.6); /* #EAD6B3 */
   --accent-foreground: oklch(0.301 0.037 64); /* #3B2A1A */
   --border: oklch(0.856 0.047 80); /* #E0CDAE */
   --decorativo: oklch(0.768 0.107 78); /* #D9AB61 */
+  --borde-campo: oklch(0.595 0.047 80); /* #8E7C5F */
 
   --success: oklch(0.522 0.121 140.4); /* #3F7A33 */
   --success-suave: oklch(0.915 0.04 111.8); /* #E3E6C8 */
@@ -169,16 +175,17 @@
 [data-tema="oscuro"] {
   color-scheme: dark;
   --background: oklch(0.194 0.006 56); /* #171412 */
-  --card: oklch(0.234 0.008 59.2); /* #211D1A */
+  --card: oklch(0.26 0.008 59.2); /* Fase A: antes 0.234 (#211D1A); se separa más de la pared */
   --foreground: oklch(0.946 0.009 67.7); /* #F1ECE7 */
-  --muted: oklch(0.269 0.009 53.1); /* #2A2522 */
+  --muted: oklch(0.305 0.009 53.1); /* Fase A: antes 0.269; conserva su escalón sobre la tarjeta */
   --muted-foreground: oklch(0.711 0.013 59.5); /* #A8A09A */
   --primary: oklch(0.744 0.15 59.6); /* #F0923A */
   --primary-foreground: oklch(0.194 0.006 56); /* #171412 */
-  --accent: oklch(0.3 0.031 58.1); /* #3A2A1E */
+  --accent: oklch(0.33 0.031 58.1); /* Fase A: antes 0.3; conserva su escalón sobre la tarjeta */
   --accent-foreground: oklch(0.844 0.088 63.9); /* #F5C08F */
-  --border: oklch(0.314 0.012 62.2); /* #36302B */
+  --border: oklch(0.4 0.012 62.2); /* Fase A: antes 0.314 (#36302B); dentro de un haz de luna desaparecía (1.05) */
   --decorativo: oklch(0.744 0.15 59.6); /* #F0923A */
+  --borde-campo: oklch(0.578 0.012 62.2); /* #7F7873. Fase A: antes 0.549; la bandeja más clara lo exigía */
 
   --success: oklch(0.724 0.152 147); /* #5CBF6B */
   --success-suave: oklch(0.298 0.041 149.4); /* #1E3322 */
@@ -196,7 +203,8 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    /* R6: outline-ring sin /50: el contorno de foco necesita 3:1 contra lo que lo rodea (al 50 % daba 2.07-2.77). */
+    @apply border-border outline-ring;
   }
   body {
     @apply bg-background text-foreground;
@@ -210,4 +218,103 @@
   h3 {
     @apply font-heading;
   }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Luz sobre la pared (DI-14, DI-15, Fase A). Capas de components/fondo-luz.tsx. Cada tema tiene su capa con sus
+   propios colores (si compartieran una variable, la capa que se desvanece cambiaría de color al instante).
+   La luz ACLARA la pared (y la sombra la oscurece apenas): el contraste del texto sobre el fondo se mide en sus
+   extremos con `pnpm diseno:contraste` (pares "luz" y "sombra"). Las tarjetas siguen opacas encima.
+   --------------------------------------------------------------------------------------------------------------- */
+:root {
+  /* Sol (claro): haces de una ventana, blanco cálido; entre haces, una sombra muy leve. */
+  --sol: oklch(0.995 0.025 88 / 0.95);
+  --sol-sombra: oklch(0.55 0.012 70 / 0.1);
+  /* Luna (oscuro): haces fríos y tenues; fuera de ellos, la pared un poco más oscura. */
+  --luna: oklch(0.66 0.06 250 / 0.2);
+  --luna-sombra: oklch(0 0 0 / 0.3);
+  /* Lámpara: el foco junto al ícono (arriba a la derecha), que sube y baja por la pared, y una viñeta cálida. */
+  --lampara-nucleo: oklch(0.995 0.05 95 / 1);
+  --lampara-halo: oklch(0.98 0.08 88 / 0.85);
+  --lampara-ambiente: oklch(0.965 0.07 80 / 0.55);
+  --lampara-sombra: oklch(0.42 0.07 55 / 0.15);
+}
+
+/* La pared: ruido fractal en escala de grises (feTurbulence + saturate 0), mezclado en soft-light: aclara y oscurece
+   un poco por zonas, como un estuco, sobre cualquier fondo. Pesa unos cientos de bytes. NO se repite en baldosas
+   (stitchTiles dejaba costuras visibles): es una sola imagen estirada a toda la ventana (cover); el ruido de baja
+   frecuencia se estira sin que se note y el navegador lo dibuja una sola vez. */
+.pared-textura {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1000' preserveAspectRatio='none'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .007' numOctaves='5' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-repeat: no-repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.16;
+}
+[data-tema="oscuro"] .pared-textura {
+  opacity: 0.1;
+}
+
+.luz {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+[data-tema="claro"] .luz-sol,
+[data-tema="oscuro"] .luz-luna,
+[data-tema="lampara"] .luz-lampara {
+  opacity: 1;
+}
+
+/* Sol: tres haces diagonales desde arriba a la izquierda, que se desvanecen hacia el centro (mask-image). */
+.luz-sol {
+  background: linear-gradient(118deg,
+    var(--sol-sombra) 0 16%, var(--sol) 18% 27%, var(--sol-sombra) 29% 39%,
+    var(--sol) 41% 46%, var(--sol-sombra) 48% 56%, var(--sol) 58% 61%, transparent 66%);
+  mask-image: radial-gradient(ellipse 85% 75% at 10% 0%, black 25%, transparent 78%);
+}
+
+/* Luna: dos haces más estrechos desde arriba a la derecha, fríos. */
+.luz-luna {
+  background: linear-gradient(242deg,
+    var(--luna-sombra) 0 18%, var(--luna) 20% 27%, var(--luna-sombra) 29% 37%, var(--luna) 39% 43%, transparent 50%);
+  mask-image: radial-gradient(ellipse 80% 75% at 92% 0%, black 25%, transparent 80%);
+}
+
+/* Lámpara: núcleo alargado hacia arriba, halo que baja por la pared, ambiente amplio y viñeta en los bordes, todo
+   centrado en --lampara-x: cerca del ícono de la barra (78 %) y, desde xl, en la esquina donde cuelga la lámpara. */
+.luz-lampara {
+  --lampara-x: 78%;
+  background:
+    radial-gradient(ellipse 7% 16% at var(--lampara-x) 3%, var(--lampara-nucleo), transparent 75%),
+    radial-gradient(ellipse 16% 45% at var(--lampara-x) 14%, var(--lampara-halo), transparent 72%),
+    radial-gradient(ellipse 55% 75% at var(--lampara-x) 12%, var(--lampara-ambiente), transparent 70%),
+    radial-gradient(ellipse 110% 100% at var(--lampara-x) 12%, transparent 40%, var(--lampara-sombra));
+}
+
+@media (min-width: 80rem) {
+  .luz-lampara { --lampara-x: 96%; }
+}
+
+/* DI-15: al encenderse, la lámpara "calienta" (sube con un leve parpadeo). La animación arranca cuando la regla
+   empieza a aplicarse, es decir, al cambiar data-tema a "lampara" (y al cargar la página con la lámpara encendida). */
+@keyframes encender-lampara {
+  0% { opacity: 0; }
+  12% { opacity: 0.55; }
+  20% { opacity: 0.3; }
+  38% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+[data-tema="lampara"] .luz-lampara {
+  animation: encender-lampara 900ms ease-out;
+}
+
+/* Sin movimiento si el sistema lo pide: la luz cambia al instante. */
+@media (prefers-reduced-motion: reduce) {
+  .luz { transition: none; }
+  [data-tema="lampara"] .luz-lampara { animation: none; }
 }

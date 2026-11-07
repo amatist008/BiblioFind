@@ -5,7 +5,7 @@ import { claseBoton, claseCampo, claseEtiqueta, claseSelect, MensajeFormulario }
 import { registrarLector, verificarCorreo } from "@/lib/actions/cuenta";
 import { reservarObra } from "@/lib/actions/reservas";
 import type { EstadoFormulario } from "@/lib/definitions";
-import InputTelefonoProfesional from "@/components/input-telefono"; // <-- 1. Importas tu componente aquí
+import InputTelefonoProfesional from "@/components/input-telefono"; // <-- Tu componente de teléfono
 
 const estadoInicial: EstadoFormulario = {};
 
@@ -30,7 +30,7 @@ export function FormularioRegistro({ ciudades }: { ciudades: { id_ciudad: number
         <label htmlFor="fecha_nacimiento" className={claseEtiqueta}>Fecha de nacimiento</label>
         <input id="fecha_nacimiento" name="fecha_nacimiento" type="date" required autoComplete="bday"
                defaultValue={v.fecha_nacimiento} className={claseCampo} aria-describedby="ayuda-nacimiento" />
-        <p id="ayuda-nacimiento" className="mt-1 text-xs text-zinc-500">Algunos libros tienen clasificación por edad.</p>
+        <p id="ayuda-nacimiento" className="mt-1 text-xs text-muted-foreground">Algunos libros tienen clasificación por edad.</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -47,28 +47,25 @@ export function FormularioRegistro({ ciudades }: { ciudades: { id_ciudad: number
           <label htmlFor="numero_documento" className={claseEtiqueta}>Número de documento</label>
           <input placeholder="Ej. 12345678" id="numero_documento" name="numero_documento" required maxLength={20} autoComplete="off"
                  defaultValue={v.numero_documento} className={claseCampo} aria-describedby="ayuda-documento" />
-          <p id="ayuda-documento" className="mt-1 text-xs text-zinc-500">Lo cotejamos con el original la primera vez que vayas a una sede.</p>
+          <p id="ayuda-documento" className="mt-1 text-xs text-muted-foreground">Lo cotejamos con el original la primera vez que vayas a una sede.</p>
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {/* ================= CAMPO DE TELÉFONO USANDO TU COMPONENTE ================= */}
-      <div>
-        <label htmlFor="telefono" className={claseEtiqueta}>Teléfono</label>
-        
-        {/* Renderizas tu componente pasando el valor por si hubo un error previo en el form */}
-        <div className="mt-1">
-          <InputTelefonoProfesional defaultValue={v.telefono} />
+        <div>
+          <label htmlFor="telefono" className={claseEtiqueta}>Teléfono</label>
+          <div className="mt-1">
+            <InputTelefonoProfesional defaultValue={v.telefono} />
+          </div>
+          <p className="mt-1 text-xs text-zinc-500">Número de contacto para notificaciones de préstamos.</p>
         </div>
-        
-        <p className="mt-1 text-xs text-zinc-500">Número de contacto para notificaciones de préstamos.</p>
-      </div>
 
-      <div>
-        <label htmlFor="calle" className={claseEtiqueta}>Dirección</label>
-        <input id="calle" name="calle" required maxLength={120} autoComplete="street-address" placeholder="Cra. 5 # 10-20"
-               defaultValue={v.calle} className={claseCampo} />
-      </div>
+        <div>
+          <label htmlFor="calle" className={claseEtiqueta}>Dirección</label>
+          <input id="calle" name="calle" required maxLength={120} autoComplete="street-address" placeholder="Cra. 5 # 10-20"
+                 defaultValue={v.calle} className={claseCampo} />
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -80,7 +77,9 @@ export function FormularioRegistro({ ciudades }: { ciudades: { id_ciudad: number
           </select>
         </div>
         <div>
-          <label htmlFor="codigo_postal" className={claseEtiqueta}>Código postal <span className="font-normal text-zinc-500">(opcional)</span></label>
+          <label htmlFor="codigo_postal" className={claseEtiqueta}>
+            Código postal <span className="font-normal text-muted-foreground">(opcional)</span>
+          </label>
           <input placeholder="110111" id="codigo_postal" name="codigo_postal" inputMode="numeric" maxLength={10} autoComplete="postal-code"
                  defaultValue={v.codigo_postal} className={claseCampo} />
         </div>
@@ -95,7 +94,7 @@ export function FormularioRegistro({ ciudades }: { ciudades: { id_ciudad: number
         <label htmlFor="contrasena" className={claseEtiqueta}>Contraseña</label>
         <input id="contrasena" name="contrasena" type="password" required minLength={12} autoComplete="new-password"
                className={claseCampo} aria-describedby="ayuda-contrasena" />
-        <p id="ayuda-contrasena" className="mt-1 text-xs text-zinc-500">Mínimo 12 caracteres. Una frase larga es más segura que una palabra con símbolos.</p>
+        <p id="ayuda-contrasena" className="mt-1 text-xs text-muted-foreground">Mínimo 12 caracteres. Una frase larga es más segura que una palabra con símbolos.</p>
       </div>
 
       <MensajeFormulario estado={estado} />
@@ -105,5 +104,3 @@ export function FormularioRegistro({ ciudades }: { ciudades: { id_ciudad: number
     </form>
   );
 }
-
-// ... (las demás funciones FormularioVerificar y FormularioReserva se quedan igual)
