@@ -1,79 +1,42 @@
-'use client';
+import type { Metadata } from "next";
+import { CabeceraAuth } from "@/components/auth/cabecera-auth";
+import { PanelEditorial } from "@/components/auth/panel-editorial";
+import { FormularioLogin } from "./formulario-login";
 
-import { useActionState } from 'react';
-import { manejarLogin } from './actions';
-
+export const metadata: Metadata = {
+  title: "Iniciar sesión",
+  description: "Entra a Biblioteca Next para continuar leyendo y gestionar tus pedidos.",
+};
 
 export default function LoginPage() {
-    const [state, formAction, isPending] = useActionState(manejarLogin, null);
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-white p-4">
-
-
-        {/* Tarjeta principal del Login con estilo Neobrutalism */}
-        <div className="w-full max-w-md">
-
-            <div className='w-full px-4 py-14 flex justify-end'>
-                <a href="/register"
-                className='text-sm font-bold text-[#2E01F7] hover:underline bg-white transition-all'
-                >
-                    Crear cuenta →
-                </a>
+  return (
+    <main className="min-h-screen bg-[#f7f5f0] p-3 text-[#291d16] sm:p-5">
+      <div className="grid min-h-[calc(100vh-1.5rem)] grid-cols-1 gap-4 sm:min-h-[calc(100vh-2.5rem)] lg:grid-cols-2">
+        <section className="flex min-h-[38rem] flex-col rounded-[1.75rem] px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-9">
+          <CabeceraAuth />
+          <div className="mx-auto flex w-full max-w-[26rem] flex-1 items-center py-12">
+            <div className="w-full">
+              <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-[#291d16] sm:text-[2.7rem]">
+                Bienvenido de nuevo
+              </h1>
+              <p className="mt-3 mb-8 text-sm leading-6 text-[#766a60] sm:text-base">
+                Entra para seguir leyendo y gestionar tus pedidos.
+              </p>
+              <FormularioLogin />
             </div>
-
-          <h1 className="text-3xl font-black uppercase tracking-wider mb-2 text-black text-center">
-            Bienvenido
-          </h1>
-          <p className="text-gray-600 font-medium mb-6 text-center">
-            Ingresa a tu cuenta de lector o empleado
-          </p>
-
-          {/* Mensaje de error en rojo con estilo neobrutalista */}
-        {state?.error && (
-          <div className="mb-4 bg-red-100 border-2 border-black p-3 text-red-700 font-bold text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-            ⚠️ {state.error}
           </div>
-        )}
-  
-          <form action={formAction} className="space-y-6 ">
-            <div className='flex justify-center'>
-              <input
-                type="email"
-                name='correo'
-                required
-                disabled={isPending}//Se deshabilita el input si esta cargando
-                placeholder="tu@correo.com"
-                className="w-76 border-2 rounded-sm border-black p-3 font-medium bg-[#F3F4F6] focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-              />
-            </div>
-  
-            <div className='flex justify-center w-full'>
-              <input
-                type="password"
-                name='password'
-                required
-                disabled={isPending}//Se deshabilita el input si esta cargando
-                placeholder="••••••••"
-                className="w-76 border-2 rounded-sm border-black p-3 font-medium bg-[#F3F4F6] focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-              />
-            </div>
-
-            <div className='flex justify-center'>
-            <button
-              type="submit"
-              disabled={isPending}//Bloqueamos fisicamente el boton para evitar el doble clic
-              
-              className="w-48 bg-[#2E01F7] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] border-1 rounded-sm border-black px-4 py-2 font-bold text-white tracking-wide hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer mt-2 ${
-                isPending 
-                ? 'bg-gray-400 cursor-not-allowed shadow-none translate-x-[2px] translate-y-[2px]'
-                : 'bg-[#2E01F7] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] cursor-pointer'
-                "
-            >
-              {isPending ? 'Verificando...' : 'Iniciar Sesión'}
-            </button>
-            </div>
-          </form>
-        </div>
-      </main>
-    );
-  }
+          <p className="pt-4 text-center text-xs text-[#a49a90]">
+            Libros digitales y físicos, en un solo lugar.
+          </p>
+        </section>
+        <PanelEditorial
+          imagen="/espiral-lectora.svg"
+          textoAlternativo="Espiral artística en tonos verdes y tierra que enmarca a una persona"
+          titulo="Tu carné de lector empieza aquí"
+          descripcion="Renta libros físicos y digitales desde un solo lugar."
+          pie="Diseñado para amantes de la lectura."
+        />
+      </div>
+    </main>
+  );
+}

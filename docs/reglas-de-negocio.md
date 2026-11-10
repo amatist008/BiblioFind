@@ -10,7 +10,7 @@
 |---|---|
 | D-01 | Sistema para **una red de bibliotecas con varias sedes**. Catálogo y lectores compartidos entre sedes. |
 | D-02 | El lector **se registra en la web**. Con la cuenta activa puede leer digital, reservar y comprar. |
-| D-03 | Los **préstamos físicos** requieren que un empleado valide la cuenta en una sede, con documento de identidad. |
+| D-03 | Los **préstamos físicos** requieren que un empleado valide la cuenta en una sede, cotejando con el original el documento capturado al registrarse. |
 | D-04 | Los **libros digitales** se prestan con **licencias limitadas**; si todas están en uso, se reserva. El préstamo digital vence solo. |
 | D-05 | **Compras** de libros físicos (stock por sede, separado de los ejemplares de préstamo) y digitales (acceso permanente). |
 | D-06 | Entrega de compras físicas: **recoger en una sede** o **envío a domicilio**. Se implementa primero la recogida en sede. |
@@ -81,10 +81,13 @@
 | # | Regla |
 |---|---|
 | RN-31 | Una **cuenta** (correo único, hash de contraseña, estado RN-01) representa a la persona. Los **perfiles** lector y empleado apuntan a la cuenta; una persona puede tener ambos con un solo inicio de sesión. |
-| RN-32 | Al registrarse se envía un **enlace de verificación** con token de un solo uso que vence. Sin verificar el correo no se usan los beneficios. En desarrollo, el enlace se imprime en la consola. |
+| RN-32 | Al registrarse se envía un **enlace de verificación** con token de un solo uso que vence en 24 horas. Sin verificar el correo no se usan los beneficios. En desarrollo, el enlace se imprime en la consola. |
 | RN-33 | Roles de empleado: **bibliotecario** (préstamos, devoluciones, ubicar ejemplares, validar lectores, entregar pedidos), **coordinador de sede** (lo anterior + traslados, auditorías de estante y reportes de su sede) y **administrador de red** (catálogo, licencias, precios, secciones, tipos de lector, configuración y empleados). |
 | RN-34 | Bibliotecario y coordinador tienen **una sede asignada** y solo operan en ella; cada operación registra el empleado y la sede. El administrador de red no tiene sede y ve todas. |
 | RN-35 | Los permisos se verifican **en el servidor** en cada operación; ocultar un botón en la interfaz no es una medida de seguridad. |
+| RN-62 | Al crear un perfil lector, se asigna `Infantil` si la persona tiene menos de 18 años y `Estándar` desde los 18. La edad se calcula a partir de `fecha_nacimiento`. |
+| RN-63 | El tipo y número de documento se capturan al registrarse, pero **no implican validación**. Solo un empleado puede verificar el documento original en una sede; hasta entonces `fecha_validacion` e `id_empleado_validador` permanecen `NULL`. |
+| RN-64 | El enlace para recuperar la contraseña usa un token de un solo uso, guardado como hash, que vence en 30 minutos. |
 
 ## Compras
 

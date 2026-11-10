@@ -2,7 +2,7 @@
 
 > Se actualiza al final de cada sesión, en el mismo commit. Es lo primero que se lee al retomar en cualquier equipo.
 
-**Última actualización:** 2026-10-02 (portátil) — Fase 2 en curso
+**Última actualización:** 2026-11-09 (portátil) — Fase 3 en curso
 
 ## Fase 0 — Diseño del dominio (terminada)
 
@@ -48,12 +48,26 @@ El libro se identifica en la URL por su **ISBN** (`/libros/9788420471839`): clav
 | C2a: búsqueda mientras se escribe (`components/buscador-catalogo.tsx` como Client Component: debounce 300 ms, `router.replace`, `useTransition`); sigue funcionando sin JS | Hecho |
 | C2b: paginación (`?pagina=`, 6 por página, `components/paginacion.tsx`); conteo con el mismo filtro, página ajustada al rango, orden total; la búsqueda nueva vuelve a la página 1 | Hecho |
 
+## Fase 3 — Autenticación de lectores (en curso)
+
+Decisión: continuar con la sesión propia firmada que ya existía en el proyecto. El tipo de lector se asigna
+como `Infantil` antes de los 18 años y `Estándar` desde los 18 (RN-62). El documento se captura al registrarse
+pero solo queda validado cuando un empleado coteja el original en una sede (RN-63).
+
+| Paso | Estado |
+|---|---|
+| Rediseño responsive de login y registro, ilustraciones locales y encabezado separado del catálogo | Hecho |
+| Registro transaccional de cuenta y perfil lector, selección de ciudad desde la BD y token de verificación (24 h) | Hecho en desarrollo |
+| Login con cookie HttpOnly: 24 h normal y 30 días con «Mantener sesión iniciada» | Hecho |
+| Recuperación de contraseña con token de un uso (30 min) | Hecho en desarrollo |
+| Envío de verificación y recuperación por correo en producción | Pendiente: no hay proveedor configurado |
+
 ## Próximo paso
 
 1. Cerrar la Fase 2 en el vault (`/documentar`): C2a y C2b en la nota de la fase y en `React`/`Next.js`.
-2. **Fase 3 — Panel de empleado:** decidir la autenticación (Auth.js Credentials o sesión propia con cookie firmada),
-   generar contraseñas de desarrollo para las cuentas del seed, proteger `/panel/*` en el servidor y registrar
-   préstamos y devoluciones con Server Actions + transacciones (RN-02 a RN-05, RN-23).
+2. Configurar un proveedor de correo y variables de entorno para enviar los enlaces en producción.
+3. Continuar el panel de empleado: proteger `/panel/*` en el servidor y registrar préstamos y devoluciones
+   con Server Actions + transacciones (RN-02 a RN-05, RN-23).
 
 ## Pendientes y avisos
 

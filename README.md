@@ -4,7 +4,7 @@ Sistema para administrar una red de bibliotecas: catálogo con ubicación físic
 préstamo digital con licencias y venta de libros. Proyecto de aprendizaje con Next.js (App Router),
 TypeScript, Tailwind CSS y MySQL con SQL escrito a mano.
 
-> **Estado:** Fase 1 — catálogo en Next.js leyendo los libros desde MySQL. Detalle y próximo paso en [docs/estado.md](docs/estado.md).
+> **Estado:** Fase 3 en curso — autenticación de lectores; falta configurar el proveedor de correo para producción. Detalle y próximo paso en [docs/estado.md](docs/estado.md).
 
 ## Documentación
 

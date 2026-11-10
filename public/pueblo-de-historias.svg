@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" fill="none">
+  <defs>
+    <linearGradient id="cielo" x1="80" y1="40" x2="800" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#241b25"/>
+      <stop offset=".46" stop-color="#5a382f"/>
+      <stop offset="1" stop-color="#172b2a"/>
+    </linearGradient>
+    <linearGradient id="agua" x1="240" y1="780" x2="560" y2="1180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#36504b"/>
+      <stop offset="1" stop-color="#142d2c"/>
+    </linearGradient>
+    <linearGradient id="luz" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffe2a0"/>
+      <stop offset="1" stop-color="#d99350"/>
+    </linearGradient>
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="3" seed="7"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 .13"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" mode="soft-light"/>
+    </filter>
+    <clipPath id="recorte"><rect width="900" height="1200" rx="36"/></clipPath>
+  </defs>
+  <g clip-path="url(#recorte)">
+    <path fill="url(#cielo)" d="M0 0h900v1200H0z"/>
+    <path d="M0 0h900v270H0z" fill="#151d20" opacity=".45"/>
+    <path d="m34 470 103-210 122 210v497H34V470Z" fill="#38272a"/>
+    <path d="m67 476 70-145 86 145v446H67V476Z" fill="#76503d"/>
+    <path d="M95 519h37v91H95zm60 0h38v91h-38zm-60 131h37v91H95zm60 0h38v91h-38zm-60 132h37v91H95zm60 0h38v91h-38z" fill="#241f22"/>
+    <path d="m592 430 132-212 143 212v532H592V430Z" fill="#3c2929"/>
+    <path d="m640 439 84-139 95 139v478H640V439Z" fill="#77503c"/>
+    <path d="M667 487h42v93h-42zm70 0h43v93h-43zm-70 127h42v93h-42zm70 0h43v93h-43zm-70 127h42v93h-42zm70 0h43v93h-43z" fill="#282023"/>
+    <path d="m234 572 123-190 133 190v318H234V572Z" fill="#71513e"/>
+    <path d="m271 570 86-124 94 124v270H271V570Z" fill="#bd8352"/>
+    <path d="m316 568 41-69 45 69v66h-86v-66Z" fill="#312629"/>
+    <path d="M294 685h42v87h-42zm77 0h42v87h-42z" fill="#f3c878"/>
+    <path d="M294 685h42v87h-42zm77 0h42v87h-42z" fill="url(#luz)" opacity=".8"/>
+    <path d="M0 828c118-42 207-50 297-16 115 43 179 143 298 151 100 7 193-63 305-39v276H0V828Z" fill="url(#agua)"/>
+    <path d="M0 844c139-28 218-23 308 21 107 53 176 137 280 140 106 4 200-67 312-52" stroke="#b89970" stroke-width="6" opacity=".45"/>
+    <path d="M0 1002c123-44 236-42 332 8 108 56 177 128 275 125 98-3 185-68 293-53" stroke="#c6a77a" stroke-width="3" opacity=".35"/>
+    <path d="M381 911c28-34 65-42 99-21l45 27-43 34c-35 28-73 21-101-10l-18-19 18-11Z" fill="#e5d6b7"/>
+    <path d="m419 906 41-3-18 45" stroke="#a98155" stroke-width="4"/>
+    <path d="M471 732h19v72h-19zm-6-20h31v22h-31z" fill="#17191a"/>
+    <circle cx="481" cy="699" r="13" fill="#17191a"/>
+    <path d="m465 801-20 71h17l19-56 17 56h17l-18-71h-32Z" fill="#17191a"/>
+    <circle cx="503" cy="344" r="7" fill="#f9d991" opacity=".9"/>
+    <circle cx="288" cy="284" r="5" fill="#f9d991" opacity=".75"/>
+    <circle cx="524" cy="208" r="4" fill="#f9d991" opacity=".7"/>
+    <rect width="900" height="1200" filter="url(#grano)" opacity=".32"/>
+  </g>
+</svg>

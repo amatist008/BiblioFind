@@ -239,7 +239,7 @@ CREATE TABLE empleado (
     CONSTRAINT fk_empleado_sede FOREIGN KEY (id_sede) REFERENCES sede (id_sede)
 );
 
--- D-02, D-03, RN-02, RN-46. Documento y validación quedan NULL hasta la validación en mostrador.
+-- D-02, D-03, RN-02, RN-46, RN-63. Se captura el documento al registrarse; la validación queda NULL hasta el mostrador.
 CREATE TABLE lector (
     id_lector              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     id_cuenta              INT UNSIGNED NOT NULL,

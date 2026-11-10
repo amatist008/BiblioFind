@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" fill="none">
+  <defs>
+    <linearGradient id="fondo" x1="30" y1="30" x2="860" y2="1120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#102c28"/>
+      <stop offset=".52" stop-color="#243d34"/>
+      <stop offset="1" stop-color="#4a2c20"/>
+    </linearGradient>
+    <radialGradient id="luz" cx="0" cy="0" r="1" gradientTransform="matrix(270 350 -330 255 645 480)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6d69b"/>
+      <stop offset=".34" stop-color="#c88a4e"/>
+      <stop offset=".7" stop-color="#74462f"/>
+      <stop offset="1" stop-color="#293b32"/>
+    </radialGradient>
+    <linearGradient id="arco" x1="135" y1="200" x2="780" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b98352"/>
+      <stop offset=".47" stop-color="#e0b778"/>
+      <stop offset="1" stop-color="#79503a"/>
+    </linearGradient>
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".78" numOctaves="3" seed="12"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 .14"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" mode="soft-light"/>
+    </filter>
+    <clipPath id="recorte"><rect width="900" height="1200" rx="36"/></clipPath>
+  </defs>
+  <g clip-path="url(#recorte)">
+    <path fill="url(#fondo)" d="M0 0h900v1200H0z"/>
+    <path d="M142 166c254-207 650-98 736 166 62 191-64 400-241 479-161 72-352 18-431-111-77-126-34-290 91-367 114-70 259-48 322 51 59 94 27 214-66 269-83 50-187 31-231-39-40-64-18-144 45-181" stroke="#132925" stroke-width="150" opacity=".8"/>
+    <path d="M95 143c264-238 695-123 791 167 72 218-76 458-277 544-181 78-398 15-486-136-87-148-34-340 109-429 131-81 300-54 373 61 67 106 29 245-78 309-95 56-213 33-263-48-45-72-19-163 53-204" stroke="url(#arco)" stroke-width="46" opacity=".92"/>
+    <path d="M94 143c264-238 695-123 791 167 72 218-76 458-277 544-181 78-398 15-486-136-87-148-34-340 109-429 131-81 300-54 373 61 67 106 29 245-78 309-95 56-213 33-263-48-45-72-19-163 53-204" stroke="#f1d29a" stroke-width="4" opacity=".62"/>
+    <ellipse cx="675" cy="481" fill="url(#luz)" rx="168" ry="207"/>
+    <ellipse cx="675" cy="481" rx="168" ry="207" stroke="#f2d69f" stroke-width="12" opacity=".7"/>
+    <path d="M673 483c-9 0-17 8-17 18v79h34v-79c0-10-8-18-17-18Z" fill="#171c19"/>
+    <circle cx="673" cy="466" r="14" fill="#171c19"/>
+    <path d="m655 574-18 71h18l18-60 17 60h18l-17-71h-36Z" fill="#171c19"/>
+    <path d="M0 1030c186-73 335-83 474-34 160 56 274 98 426 42v162H0v-170Z" fill="#10201d" opacity=".5"/>
+    <rect width="900" height="1200" filter="url(#grano)" opacity=".34"/>
+  </g>
+</svg>

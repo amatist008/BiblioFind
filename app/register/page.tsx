@@ -1,76 +1,41 @@
-'use client';
+import type { Metadata } from "next";
+import { CabeceraAuth } from "@/components/auth/cabecera-auth";
+import { PanelEditorial } from "@/components/auth/panel-editorial";
+import { obtenerCiudades } from "@/lib/data/autenticacion";
+import { FormularioRegistro } from "./formulario-registro";
 
-import { useActionState } from 'react';
-import { manejarRegistro } from './actions';
+export const metadata: Metadata = {
+  title: "Crear cuenta de lector",
+  description: "Crea tu cuenta en Biblioteca Next y descubre miles de historias.",
+};
 
-export default function RegisterPage() {
-    const [state, formAction, isPending] = useActionState(manejarRegistro, null);
-    
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-white p-4">
-        {/* Tarjeta principal con el mismo estilo Neobrutalism */}
-        <div className="w-full max-w-md bg-white border-3 rounded-sm border-black p-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative">
-          
-          {/* Enlace para volver al Login si ya tiene cuenta */}
-          <div className="absolute top-4 right-4">
-            <a 
-              href="/login" 
-              className="text-xs font-bold uppercase text-[#2E01F7] hover:underline"
-            >
-              ← Ir al Login
-            </a>
+export default async function RegisterPage() {
+  const ciudades = await obtenerCiudades();
+
+  return (
+    <main className="min-h-screen bg-[#f7f5f0] p-3 text-[#291d16] sm:p-5">
+      <div className="grid min-h-[calc(100vh-1.5rem)] grid-cols-1 gap-4 sm:min-h-[calc(100vh-2.5rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)]">
+        <PanelEditorial
+          imagen="/pueblo-de-historias.svg"
+          textoAlternativo="Ilustración de un pueblo de casas-libro junto a un canal iluminado"
+          titulo="Únete a nuestra comunidad lectora"
+          descripcion="Gestiona tus préstamos y descubre miles de historias en un solo lugar."
+          pie="Empieza tu viaje hoy."
+        />
+        <section className="flex flex-col px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-9">
+          <CabeceraAuth />
+          <div className="mx-auto w-full max-w-[38rem] flex-1 py-10 lg:py-3">
+            <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-[#291d16] sm:text-4xl">
+              Crea tu cuenta de lector
+            </h1>
+            <p className="mt-3 mb-7 max-w-2xl text-sm leading-6 text-[#766a60]">
+              Con la cuenta verificada puedes reservar y leer libros digitales. Para llevarte libros físicos,
+              presenta tu documento en cualquier sede.
+            </p>
+            <FormularioRegistro ciudades={ciudades} />
           </div>
-
-          <h1 className="text-3xl font-black uppercase tracking-wider mb-2 text-black mt-2">
-            Registro
-          </h1>
-          <p className="text-gray-600 font-medium mb-6">
-            Crea tu cuenta nueva de lector o empleado
-          </p>
-
-          {/* Mensaje de error en rojo estilo neobrutalista */}
-          {state?.error && (
-            <div className="mb-4 bg-red-100 border-2 border-black p-3 text-red-700 font-bold text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-              ⚠️ {state.error}
-            </div>
-          )}
-  
-          <form action={formAction} className="space-y-6">
-            <div>
-              <label className="block text-sm font-bold uppercase mb-1 text-black">
-                Correo Electrónico
-              </label>
-              <input
-                type="email"
-                name="correo"
-                required
-                placeholder="tu@correo.com"
-                className="w-full border-2 border-black p-3 font-medium bg-[#F3F4F6] focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-              />
-            </div>
-  
-            <div>
-              <label className="block text-sm font-bold uppercase mb-1 text-black">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                name="password"
-                required
-                placeholder="••••••••"
-                className="w-full border-2 border-black p-3 font-medium bg-[#F3F4F6] focus:outline-none focus:bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-              />
-            </div>
-  
-            <button
-              type="submit"
-              disabled={isPending}
-              className="w-full bg-[#2E01F7] border border-black py-3 rounded-sm font-bold text-white uppercase tracking-wide shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer mt-2"
-            >
-              {isPending ? 'Registrando...' : 'Crear Cuenta'}
-            </button>
-          </form>
-        </div>
-      </main>
-    );
+        </section>
+      </div>
+    </main>
+  );
 }
