@@ -46,6 +46,10 @@ ejecutan con el volumen vacío**; para aplicar cambios de esquema hay que recrea
 docker compose down -v && docker compose up -d --wait
 ```
 
+Las bases existentes pueden recibir cambios aditivos mediante migraciones sin borrar sus datos. Para el
+contacto laboral del perfil, ejecuta `pnpm db:migrate:perfil`; la migración es idempotente y también está
+incluida en `db/init/01_schema.sql` para futuras instalaciones limpias.
+
 Instalar dependencias y arrancar la app (con MySQL ya arriba):
 
 ```bash
@@ -54,6 +58,22 @@ pnpm dev                    # http://localhost:3000
 ```
 
 La página de inicio debe mostrar el catálogo con 16 libros (por ejemplo "Cien años de soledad", con su tilde).
+
+### Preparar la cuenta administradora
+
+El seed incluye una cuenta con perfil `admin_red`, pero la contraseña es un marcador inutilizable. Para crear
+un administrador o sustituir de forma segura la contraseña del existente, completa temporalmente en `.env`
+`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NOMBRE` y `ADMIN_APELLIDO`. La contraseña debe tener al menos 12
+caracteres y no más de 72 bytes UTF-8. Luego ejecuta:
+
+```bash
+pnpm admin:bootstrap
+```
+
+El script usa bcrypt, verifica o crea la cuenta y el perfil `admin_red` dentro de una transacción, y marca el
+correo como verificado. Si el correo ya corresponde a una cuenta desactivada o a un empleado con otro rol,
+se detiene sin cambiar nada. Al finalizar, elimina los valores `ADMIN_*` de `.env`; nunca uses una contraseña
+predeterminada ni guardes esas credenciales en Git.
 
 Detener todo al terminar:
 

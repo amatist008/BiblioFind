@@ -223,6 +223,8 @@ erDiagram
         int id_cuenta FK, UK
         varchar nombre
         varchar apellido
+        varchar telefono "NULL"
+        varchar calle "NULL"
         enum rol
         int id_sede FK "NULL"
         date fecha_contratacion
@@ -274,7 +276,7 @@ erDiagram
 | `cuenta` | RN-01, RN-31 | Sin columna de estado: se deduce de `fecha_verificacion`, `lector.fecha_validacion` y `fecha_desactivacion` (RN-01). |
 | `token_cuenta` | RN-32, RN-64 | Se guarda el **hash** del token, no el token: si alguien lee la BD, no puede usar los enlaces. `tipo`: `verificar_correo`, `recuperar_contrasena`. Un solo uso (`usado_en`) y vencimiento (`expira_en`). |
 | `lector` | D-03, RN-02, RN-46, RN-63 | El documento se captura al registrarse, pero la fecha y el empleado validador quedan NULL hasta el cotejo presencial. `UNIQUE(tipo_documento, numero_documento)`. El carné de BD2 desaparece: lo identifica la cuenta y, tras validar, el documento. |
-| `empleado` | RN-33, RN-34 | `rol` ENUM: `bibliotecario`, `coordinador`, `admin_red`. `CHECK`: `admin_red` ⇔ `id_sede IS NULL`. `activo` reemplaza a `EstadoEmpleado` de BD2. |
+| `empleado` | RN-33, RN-34, RN-65 | `rol` ENUM: `bibliotecario`, `coordinador`, `admin_red`. `CHECK`: `admin_red` ⇔ `id_sede IS NULL`. `activo` reemplaza a `EstadoEmpleado` de BD2. Teléfono y dirección son datos de contacto laborales; al editar una cuenta que también tiene perfil lector se sincronizan ambos perfiles. |
 | `prestamo_fisico` | RN-02 a RN-05, RN-13, RN-34 | Estado **calculado**: devuelto / vencido / activo según las fechas. `renovaciones` como contador (RN-04); la fecha de vencimiento se corre al renovar. |
 | `multa` | RN-05, RN-06 | `tipo`: `retraso`, `reposicion`. `UNIQUE(id_prestamo, tipo)`: un préstamo no genera dos multas del mismo tipo. `estado`: `pendiente`, `pagada`, `anulada`. |
 | `reserva_fisica` | RN-07 a RN-12 | La cola es `ORDER BY fecha_solicitud, id_reserva`. `id_prestamo` enlaza la reserva cumplida con el préstamo que la cumplió. |

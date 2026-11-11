@@ -229,6 +229,8 @@ CREATE TABLE empleado (
     id_cuenta           INT UNSIGNED NOT NULL,
     nombre              VARCHAR(60) NOT NULL,
     apellido            VARCHAR(60) NOT NULL,
+    telefono            VARCHAR(20) NULL,
+    calle               VARCHAR(120) NULL,
     rol                 ENUM('bibliotecario', 'coordinador', 'admin_red') NOT NULL,
     id_sede             INT UNSIGNED NULL,
     fecha_contratacion  DATE NOT NULL,

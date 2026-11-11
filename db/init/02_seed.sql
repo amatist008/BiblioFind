@@ -9,7 +9,7 @@ SET NAMES utf8mb4;
 -- Reglas del seed:
 --   * Nunca ids a mano: se buscan por claves naturales (AUTO_INCREMENT no se revierte con ROLLBACK).
 --   * Fechas relativas a hoy: cada reconstrucción conserva los escenarios (vencido sigue vencido).
---   * password_hash es un marcador que no corresponde a ninguna contraseña; se reemplaza en la Fase 3.
+--   * password_hash es un marcador que no corresponde a ninguna contraseña; el administrador se inicializa con scripts/bootstrap-admin.mjs.
 --   * Las clasificaciones por edad de algunos títulos se asignaron para probar RN-46; no son oficiales.
 -- =====================================================================
 

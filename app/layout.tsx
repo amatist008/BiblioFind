@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { EncabezadoSitio } from "@/components/encabezado-sitio";
+import { obtenerCuentaParaNavegacion } from "@/lib/data/navegacion";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,14 +20,16 @@ export const metadata: Metadata = {
   description: "Catálogo de la red de bibliotecas: disponibilidad por sede y ubicación de cada libro.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const cuenta = await obtenerCuentaParaNavegacion();
+
   return (
     <html
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <EncabezadoSitio />
+        <EncabezadoSitio cuenta={cuenta} />
         <div className="flex-1">{children}</div>
       </body>
     </html>

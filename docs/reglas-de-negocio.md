@@ -88,6 +88,7 @@
 | RN-62 | Al crear un perfil lector, se asigna `Infantil` si la persona tiene menos de 18 años y `Estándar` desde los 18. La edad se calcula a partir de `fecha_nacimiento`. |
 | RN-63 | El tipo y número de documento se capturan al registrarse, pero **no implican validación**. Solo un empleado puede verificar el documento original en una sede; hasta entonces `fecha_validacion` e `id_empleado_validador` permanecen `NULL`. |
 | RN-64 | El enlace para recuperar la contraseña usa un token de un solo uso, guardado como hash, que vence en 30 minutos. |
+| RN-65 | El perfil laboral guarda teléfono y dirección. Si una cuenta tiene perfiles de lector y empleado, la edición de nombre, apellido, teléfono y dirección actualiza ambos perfiles para mantener los datos personales sincronizados. |
 
 ## Compras
 

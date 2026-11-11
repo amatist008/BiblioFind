@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "admin:bootstrap": "node --env-file-if-exists=.env scripts/bootstrap-admin.mjs",
+    "db:migrate:perfil": "node --env-file-if-exists=.env scripts/migrar-contacto-empleado.mjs"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

@@ -2,7 +2,7 @@
 
 > Se actualiza al final de cada sesión, en el mismo commit. Es lo primero que se lee al retomar en cualquier equipo.
 
-**Última actualización:** 2026-11-09 (portátil) — Fase 3 en curso
+**Última actualización:** 2026-11-11 (portátil) — Fase 3 en curso
 
 ## Fase 0 — Diseño del dominio (terminada)
 
@@ -61,6 +61,9 @@ pero solo queda validado cuando un empleado coteja el original en una sede (RN-6
 | Login con cookie HttpOnly: 24 h normal y 30 días con «Mantener sesión iniciada» | Hecho |
 | Recuperación de contraseña con token de un uso (30 min) | Hecho en desarrollo |
 | Envío de verificación y recuperación por correo en producción | Pendiente: no hay proveedor configurado |
+| Bootstrap transaccional de administrador mediante `pnpm admin:bootstrap` | Hecho; verificado en la BD local que el admin del seed tiene el hash marcador |
+| Perfil lector y empleado: lectura autenticada, métricas, edición sincronizada y logout | Hecho; perfil empleado ampliado con contacto en `db/migrations/20261111_contacto_empleado.sql`, aplicada a la BD local |
+| Navbar con estado de sesión verificado en servidor, perfil y avatar DiceBear | Hecho; probado con solicitudes anónimas y sesión de administrador |
 
 ## Próximo paso
 
